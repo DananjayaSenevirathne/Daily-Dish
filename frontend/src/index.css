@@ -1,14 +1,27 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+*{
+  padding: 0;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f8f8f8;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif; 
 }
 
-div {
-  text-align: center;
-  margin-top: 60px;
+
+
+
+body {
+  min-height: 100vh;
 }
 
-h1 {
-  color: #222;
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app{
+  width:80%;
+  margin: auto;
+
 }
