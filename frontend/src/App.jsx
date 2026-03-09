@@ -1,11 +1,12 @@
-import React from 'react'
+import './App.css'
 import Navbar from './componants/Navbar/Navbar'
+import Home from './pages/Home/Home'
 
-const App = () => {
+function App() {
   return (
     <div className='app'>
       <Navbar />
-      
+      <Home />
     </div>
   )
 }
