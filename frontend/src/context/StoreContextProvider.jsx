@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StoreContext } from './StoreContext'
 import { food_list } from '../assets/MenuData'
 
@@ -14,20 +14,18 @@ const StoreContextProvider = (props) => {
   }
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }))
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] > 1 ? prev[itemId] - 1 : 0,
+    }))
   }
-
-  useEffect(() => {
-    console.log(cartItems)
-  }, [cartItems])
-
 
   const contextValue = {
     food_list,
     cartItems,
     addToCart,
-    setCartItems,
     removeFromCart,
+    setCartItems,
   }
 
   return (
