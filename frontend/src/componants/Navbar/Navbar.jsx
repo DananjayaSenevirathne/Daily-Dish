@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import './Navbar.css'
 
+
 import logo from '../../assets/logo.png'
 import searchIcon from '../../assets/search_icon.png'
 import basketIcon from '../../assets/basket_icon.png'
