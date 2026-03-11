@@ -4,6 +4,7 @@ import Navbar from './componants/Navbar/Navbar'
 import Home from './pages/Home/Home'
 import Footer from './componants/Footer/Footer'
 import Cart from './pages/Cart/Cart'
+import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import LogingPopup from './componants/LogingPopup/LogingPopup'
 import { Routes, Route } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/order' element={<PlaceOrder />} />
         </Routes>
       </div>
 
