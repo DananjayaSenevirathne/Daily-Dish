@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import './App.css'
 import Navbar from './componants/Navbar/Navbar'
 import Home from './pages/Home/Home'
-import AppDownload from './componants/AppDownload/AppDownload'
 import Footer from './componants/Footer/Footer'
+import Cart from './pages/Cart/Cart'
 import LogingPopup from './componants/LogingPopup/LogingPopup'
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   const [showLogin, setShowLogin] = useState(false)
@@ -15,8 +16,10 @@ function App() {
 
       <div className='app'>
         <Navbar setShowLogin={setShowLogin} />
-        <Home />
-        <AppDownload />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/cart' element={<Cart />} />
+        </Routes>
       </div>
 
       <Footer />
