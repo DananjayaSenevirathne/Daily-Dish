@@ -1,39 +1,51 @@
 import React, { useState } from 'react'
 import './Navbar.css'
-import { Link } from 'react-router-dom'
 
 import logo from '../../assets/logo.png'
 import searchIcon from '../../assets/search_icon.png'
 import basketIcon from '../../assets/basket_icon.png'
 
-const Navbar = () => {
-  const [menu, setMenu] = useState('Home')
+const Navbar = ({ setShowLogin }) => {
+  const [menu, setMenu] = useState('home')
 
   return (
     <div className='navbar'>
-      <img src={logo} alt='logo' className='logo' />
+      <a href='#home'>
+        <img src={logo} alt='logo' className='logo' />
+      </a>
 
       <ul className='navbar-menu'>
-        <Link to='/' className={menu === 'Home' ? 'active' : ''} onClick={() => setMenu('Home')}>
+        <a
+          href='#home'
+          onClick={() => setMenu('home')}
+          className={menu === 'home' ? 'active' : ''}
+        >
           Home
-        </Link>
-        <Link to='/menu' className={menu === 'Menu' ? 'active' : ''} onClick={() => setMenu('Menu')}>
+        </a>
+
+        <a
+          href='#explore-menu'
+          onClick={() => setMenu('menu')}
+          className={menu === 'menu' ? 'active' : ''}
+        >
           Menu
-        </Link>
-        <Link
-          to='/app-download'
-          className={menu === 'Mobile-app' ? 'active' : ''}
-          onClick={() => setMenu('Mobile-app')}
+        </a>
+
+        <a
+          href='#app-download'
+          onClick={() => setMenu('mobile-app')}
+          className={menu === 'mobile-app' ? 'active' : ''}
         >
           Mobile-app
-        </Link>
-        <Link
-          to='/contact'
-          className={menu === 'Contact us' ? 'active' : ''}
-          onClick={() => setMenu('Contact us')}
+        </a>
+
+        <a
+          href='#footer'
+          onClick={() => setMenu('contact-us')}
+          className={menu === 'contact-us' ? 'active' : ''}
         >
           Contact us
-        </Link>
+        </a>
       </ul>
 
       <div className='navbar-right'>
@@ -42,7 +54,8 @@ const Navbar = () => {
           <img src={basketIcon} alt='basket' />
           <div className='dot'></div>
         </div>
-        <button>sign in</button>
+
+        <button onClick={() => setShowLogin(true)}>sign in</button>
       </div>
     </div>
   )
