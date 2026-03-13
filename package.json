@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "server": "npm --prefix backend run server"
+  },
   "dependencies": {
     "react-router-dom": "^7.13.1"
   }
