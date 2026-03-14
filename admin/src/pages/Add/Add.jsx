@@ -7,8 +7,8 @@ import { toast } from 'react-toastify'
 
 
 
-const Add = () => {
-  const url = "http://localhost:5000"
+const Add = ({ url }) => {
+
 
   const [image, setImage] = useState(false)
   const [data, setData] = useState({
@@ -63,10 +63,12 @@ const Add = () => {
 
       } else {
         alert(response.data.message || "Failed to add product")
+        toast.error(response.data.message || "Failed to add product") 
       }
     } catch (error) {
       console.error("Submit error:", error)
       alert("Error while submitting form")
+      toast.error("Error while submitting form")
     }
   }
 
