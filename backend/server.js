@@ -2,23 +2,24 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
+import foodRouter from "./routes/foodRoutes.js";
 
-// App config
+// app config
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middlewares
+// middlewares
 app.use(express.json());
 app.use(cors());
 
-// DB connection
+// db connection
 connectDB();
 
+// api routes
+app.use("/api/foods", foodRouter);
+app.use("/images", express.static("uploads"));
 
-//API routes
-app.use("/api/foods", foodRoutes.js);
-
-// API endpoints
+// api endpoint
 app.get("/", (req, res) => {
   res.send("API Working");
 });
