@@ -2,6 +2,10 @@ import './Add.css'
 import upload_area from '../../assets/upload_area.png'
 import { useState } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
+
+
+
 
 const Add = () => {
   const url = "http://localhost:5000"
@@ -54,6 +58,9 @@ const Add = () => {
           price: "",
         })
         setImage(false)
+        toast.success(response.data.message)
+
+
       } else {
         alert(response.data.message || "Failed to add product")
       }
