@@ -1,10 +1,143 @@
-import React from 'react'
 import './Add.css'
+import upload_area from '../../assets/upload_area.png'
+import { useState } from 'react'
+import axios from 'axios'
 
 const Add = () => {
+  const url = "http://localhost:5000"
+
+  const [image, setImage] = useState(false)
+  const [data, setData] = useState({
+    name: "",
+    description: "",
+    category: "Salad",
+    price: "",
+  })
+
+  const onChangeHandler = (event) => {
+    const name = event.target.name
+    const value = event.target.value
+    setData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault()
+
+    if (!image) {
+      alert("Please upload an image")
+      return
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append("image", image)
+      formData.append("name", data.name)
+      formData.append("description", data.description)
+      formData.append("category", data.category)
+      formData.append("price", Number(data.price))
+
+      console.log("Submitting...")
+      console.log("URL:", `${url}/api/food/add`)
+      console.log("Data:", data)
+      console.log("Image:", image)
+
+      const response = await axios.post(`${url}/api/food/add`, formData)
+
+      console.log("Response:", response.data)
+
+      if (response.data.success) {
+        alert(response.data.message)
+        setData({
+          name: "",
+          description: "",
+          category: "Salad",
+          price: "",
+        })
+        setImage(false)
+      } else {
+        alert(response.data.message || "Failed to add product")
+      }
+    } catch (error) {
+      console.error("Submit error:", error)
+      alert("Error while submitting form")
+    }
+  }
+
   return (
-    <div>
-      
+    <div className='add'>
+      <form className="flex-col" onSubmit={onSubmitHandler}>
+        <div className="add-img-upload flex-col">
+          <p>Upload Image</p>
+          <label htmlFor="image">
+            <img
+              src={image ? URL.createObjectURL(image) : upload_area}
+              alt="Upload area"
+            />
+          </label>
+          <input
+            onChange={(e) => setImage(e.target.files[0])}
+            type="file"
+            id="image"
+            hidden
+            required
+          />
+        </div>
+
+        <div className="add-product-name flex-col">
+          <p>Product Name</p>
+          <input
+            onChange={onChangeHandler}
+            value={data.name}
+            type="text"
+            name="name"
+            placeholder="Type here"
+          />
+        </div>
+
+        <div className="add-product-description flex-col">
+          <p>Product Description</p>
+          <textarea
+            onChange={onChangeHandler}
+            value={data.description}
+            name="description"
+            rows="10"
+            placeholder="Write content here"
+          ></textarea>
+        </div>
+
+        <div className="add-category-price">
+          <div className="add-category flex-col">
+            <p>Product Category</p>
+            <select
+              onChange={onChangeHandler}
+              value={data.category}
+              name="category"
+              id="category"
+            >
+              <option value="Salad">Salad</option>
+              <option value="Rolls">Rolls</option>
+              <option value="Desserts">Desserts</option>
+              <option value="Sandwich">Sandwich</option>
+              <option value="Cake">Cake</option>
+              <option value="Pure Veg">Pure Veg</option>
+              <option value="Noodles">Noodles</option>
+            </select>
+          </div>
+
+          <div className="add-price flex-col">
+            <p>Product Price</p>
+            <input
+              onChange={onChangeHandler}
+              value={data.price}
+              type="number"
+              name="price"
+              placeholder="$20"
+            />
+          </div>
+        </div>
+
+        <button type="submit" className="add-btn">ADD</button>
+      </form>
     </div>
   )
 }
