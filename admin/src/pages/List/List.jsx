@@ -44,8 +44,7 @@ const List = ({ url }) => {
       await fetchList()
     }
     loadFoods()
-  }, [])
-
+  }, )
   return (
     <div className="list add flex-col">
       <p>All Foods List</p>
