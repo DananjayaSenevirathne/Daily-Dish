@@ -1,3 +1,4 @@
+import React from 'react'
 import './AppDownload.css'
 import play_store from '../../assets/play_store.png'
 import app_store from '../../assets/app_store.png'
