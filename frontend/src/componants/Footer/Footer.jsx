@@ -1,3 +1,4 @@
+import React from 'react'
 import './Footer.css'
 import logo from '../../assets/logo.png'
 import facebook_icon from '../../assets/facebook_icon.png'
