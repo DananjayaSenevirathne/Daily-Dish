@@ -5,22 +5,48 @@ import { Link, useLocation } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import searchIcon from '../../assets/search_icon.png'
 import basketIcon from '../../assets/basket_icon.png'
+
 import { StoreContext } from '../../context/StoreContext'
 
 const Navbar = ({ setShowLogin }) => {
+
   const [menu, setMenu] = useState('home')
-  const { getTotalCartAmount } = useContext(StoreContext)
+
+  const {
+    getTotalCartAmount,
+    token,
+    setToken
+  } = useContext(StoreContext)
+
   const location = useLocation()
 
   const isHomePage = location.pathname === '/'
 
+  // Logout function
+  const logout = () => {
+
+    localStorage.removeItem("token")
+
+    setToken("")
+
+  }
+
   return (
+
     <div className='navbar'>
+
+      {/* Logo */}
       <Link to='/'>
-        <img src={logo} alt='logo' className='logo' />
+        <img
+          src={logo}
+          alt='logo'
+          className='logo'
+        />
       </Link>
 
+      {/* Menu */}
       <ul className='navbar-menu'>
+
         <Link
           to='/'
           onClick={() => setMenu('home')}
@@ -31,6 +57,7 @@ const Navbar = ({ setShowLogin }) => {
 
         {isHomePage ? (
           <>
+
             <a
               href='#explore-menu'
               onClick={() => setMenu('menu')}
@@ -44,7 +71,7 @@ const Navbar = ({ setShowLogin }) => {
               onClick={() => setMenu('mobile-app')}
               className={menu === 'mobile-app' ? 'active' : ''}
             >
-              Mobile-app
+              Mobile App
             </a>
 
             <a
@@ -52,11 +79,13 @@ const Navbar = ({ setShowLogin }) => {
               onClick={() => setMenu('contact-us')}
               className={menu === 'contact-us' ? 'active' : ''}
             >
-              Contact us
+              Contact Us
             </a>
+
           </>
         ) : (
           <>
+
             <Link
               to='/'
               onClick={() => setMenu('menu')}
@@ -70,7 +99,7 @@ const Navbar = ({ setShowLogin }) => {
               onClick={() => setMenu('mobile-app')}
               className={menu === 'mobile-app' ? 'active' : ''}
             >
-              Mobile-app
+              Mobile App
             </Link>
 
             <Link
@@ -78,23 +107,79 @@ const Navbar = ({ setShowLogin }) => {
               onClick={() => setMenu('contact-us')}
               className={menu === 'contact-us' ? 'active' : ''}
             >
-              Contact us
+              Contact Us
             </Link>
+
           </>
         )}
+
       </ul>
 
+      {/* Right Side */}
       <div className='navbar-right'>
+
         <img src={searchIcon} alt='search' />
+
+        {/* Cart */}
         <div className='navbar-search-icon'>
+
           <Link to='/cart'>
             <img src={basketIcon} alt='basket' />
           </Link>
+
           <div className={getTotalCartAmount() === 0 ? '' : 'dot'}></div>
+
         </div>
 
-        <button onClick={() => setShowLogin(true)}>sign in</button>
+        {/* Login / Profile */}
+        {!token ? (
+
+          <button onClick={() => setShowLogin(true)}>
+            Sign In
+          </button>
+
+        ) : (
+
+          <div className='navbar-profile'>
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              alt="profile"
+            />
+
+            <ul className='nav-profile-dropdown'>
+
+              <li>
+
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png"
+                  alt="orders"
+                />
+
+                <p>Orders</p>
+
+              </li>
+
+              <hr />
+
+              <li onClick={logout}>
+
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png"
+                  alt="logout"
+                />
+
+                <p>Logout</p>
+
+              </li>
+
+            </ul>
+
+          </div>
+        )}
+
       </div>
+
     </div>
   )
 }
