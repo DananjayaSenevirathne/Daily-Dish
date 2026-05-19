@@ -1,54 +1,78 @@
-import { useState } from 'react'
-import { StoreContext } from './StoreContext'
-import { food_list } from '../assets/MenuData'
+import React, { useState } from "react";
+import { food_list } from "../assets/assets";
+import { StoreContext } from "./StoreContext";
 
-const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState({})
+const StoreContextProvider = ({ children }) => {
+
+  const url = "http://localhost:5000";
+
+  const [token, setToken] = useState("");
+  const [cartItems, setCartItems] = useState({});
 
   const addToCart = (itemId) => {
+
     if (!cartItems[itemId]) {
-      setCartItems((prev) => ({ ...prev, [itemId]: 1 }))
+
+      setCartItems((prev) => ({
+        ...prev,
+        [itemId]: 1
+      }));
+
     } else {
-      setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }))
+
+      setCartItems((prev) => ({
+        ...prev,
+        [itemId]: prev[itemId] + 1
+      }));
     }
-  }
+  };
 
   const removeFromCart = (itemId) => {
+
     setCartItems((prev) => ({
       ...prev,
-      [itemId]: prev[itemId] > 1 ? prev[itemId] - 1 : 0,
-    }))
-  }
+      [itemId]: prev[itemId] - 1
+    }));
+  };
 
   const getTotalCartAmount = () => {
-    let totalAmount = 0
+
+    let totalAmount = 0;
 
     for (const item in cartItems) {
+
       if (cartItems[item] > 0) {
-        const itemInfo = food_list.find((product) => product._id === item)
+
+        const itemInfo = food_list.find(
+          (product) => product._id === item
+        );
+
         if (itemInfo) {
-          totalAmount += itemInfo.price * cartItems[item]
+          totalAmount += itemInfo.price * cartItems[item];
         }
       }
     }
 
-    return totalAmount
-  }
+    return totalAmount;
+  };
 
   const contextValue = {
     food_list,
     cartItems,
+    setCartItems,
     addToCart,
     removeFromCart,
     getTotalCartAmount,
-    setCartItems,
-  }
+    url,
+    token,
+    setToken
+  };
 
   return (
     <StoreContext.Provider value={contextValue}>
-      {props.children}
+      {children}
     </StoreContext.Provider>
-  )
-}
+  );
+};
 
-export default StoreContextProvider
+export default StoreContextProvider;
