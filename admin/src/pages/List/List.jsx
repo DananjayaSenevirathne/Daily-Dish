@@ -5,68 +5,134 @@ import { toast } from 'react-toastify'
 
 const List = ({ url }) => {
 
-
   const [list, setList] = useState([])
 
+  // Fetch Food List
   const fetchList = async () => {
+
     try {
+
       const response = await axios.get(`${url}/api/food/list`)
 
+      console.log(response.data)
+
       if (response.data.success) {
-        setList(response.data.foods)
+
+        // IMPORTANT
+        setList(response.data.data)
+
       } else {
-        toast.error(response.data.message || "Failed to fetch list")
+
+        toast.error("Error fetching foods")
       }
+
     } catch (error) {
-      console.error("Fetch list error:", error)
-      toast.error("Error while fetching list")
+
+      console.log(error)
+      toast.error("Server Error")
     }
   }
 
-  const removeFood = async (id) => {
+  // Remove Food
+  const removeFood = async (foodId) => {
+
     try {
-      const response = await axios.post(`${url}/api/food/remove`, { id })
+
+      const response = await axios.post(
+        `${url}/api/food/remove`,
+        {
+          id: foodId
+        }
+      )
 
       if (response.data.success) {
+
         toast.success(response.data.message)
+
         fetchList()
+
       } else {
-        toast.error(response.data.message || "Failed to remove food")
+
+        toast.error("Error removing food")
       }
+
     } catch (error) {
-      console.error("Remove food error:", error)
-      toast.error("Error while removing food")
+
+      console.log(error)
+      toast.error("Server Error")
     }
   }
 
-  useEffect(() => {
-    const loadFoods = async () => {
-      await fetchList()
-    }
-    loadFoods()
-  }, )
+  // Load Foods
+useEffect(() => {
+
+  const loadData = async () => {
+    await fetchList()
+  }
+
+  loadData()
+
+}, [])
+
   return (
-    <div className="list add flex-col">
+
+    <div className='list add flex-col'>
+
       <p>All Foods List</p>
-      <div className="list-table">
-        <div className="list-table-format title">
+
+      <div className='list-table'>
+
+        {/* Table Title */}
+        <div className='list-table-format title'>
+
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
           <b>Action</b>
+
         </div>
 
-        {list.map((item, index) => (
-          <div key={index} className="list-table-format">
-            <img src={`${url}/images/${item.image}`} alt={item.name} />
-            <p>{item.name}</p>
-            <p>{item.category}</p>
-            <p>${item.price}</p>
-            <p onClick={() => removeFood(item._id)} className="cursor">X</p>
-          </div>
-        ))}
+        {/* Food Items */}
+        {list.length > 0 ? (
+
+          list.map((item, index) => (
+
+            <div
+              key={index}
+              className='list-table-format'
+            >
+
+              <img
+                src={`${url}/images/${item.image}`}
+                alt={item.name}
+              />
+
+              <p>{item.name}</p>
+
+              <p>{item.category}</p>
+
+              <p>${item.price}</p>
+
+              <p
+                onClick={() => removeFood(item._id)}
+                className='cursor'
+              >
+                X
+              </p>
+
+            </div>
+
+          ))
+
+        ) : (
+
+          <p>No Food Items Found</p>
+
+        )}
+
       </div>
+
     </div>
   )
 }
