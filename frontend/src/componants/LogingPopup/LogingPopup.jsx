@@ -1,146 +1,178 @@
-import React, { useContext, useState } from 'react'
-import './LogingPopup.css'
-import cross_icon from '../../assets/cross_icon.png'
-import { StoreContext } from '../../context/StoreContext'
-import axios from 'axios'
+import React, { useContext, useState } from "react";
+import "./LogingPopup.css";
+import cross_icon from "../../assets/cross_icon.png";
+import { StoreContext } from "../../context/StoreContext";
+import axios from "axios";
 
 const LogingPopup = ({ setShowLogin }) => {
 
-  const { url,setToken } = useContext(StoreContext)
+  const { url, setToken } = useContext(StoreContext);
 
-  const [currentState, setCurrentState] = useState('Login')
+  const [currentState, setCurrentState] =
+    useState("Login");
 
   const [data, setData] = useState({
     name: "",
     email: "",
-    password: ""
-  })
+    password: "",
+  });
 
-  // Handle input changes
+  // INPUT CHANGE
   const onChangeHandler = (event) => {
 
-    const name = event.target.name
-    const value = event.target.value
+    const name = event.target.name;
 
-    setData((data) => ({ ...data, [name]: value }))
-  }
+    const value = event.target.value;
 
-  // Login / Register function
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // LOGIN / REGISTER
   const onLogin = async (event) => {
 
-    event.preventDefault()
+    event.preventDefault();
 
-    let newUrl = url
+    let newUrl = url;
 
     if (currentState === "Login") {
-      newUrl += "/api/user/login"
-    }
-    else {
-      newUrl += "/api/user/register"
+
+      newUrl += "/api/user/login";
+
+    } else {
+
+      newUrl += "/api/user/register";
     }
 
     try {
 
-      const response = await axios.post(newUrl, data)
+      const response = await axios.post(
+        newUrl,
+        data
+      );
+
+      console.log(response.data);
 
       if (response.data.success) {
-        setToken (response.data.token);
-        alert(response.data.message)
-        localStorage.setItem("token",response.data.token);
-        setShowLogin(false)
+
+        // SAVE TOKEN
+        setToken(response.data.token);
+
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
+
+        alert(response.data.message);
+
+        setShowLogin(false);
 
       } else {
 
-        alert(response.data.message)
+        alert(response.data.message);
       }
 
     } catch (error) {
 
-      console.log(error)
-      alert("Something went wrong")
+      console.log(error);
+
+      alert("Something went wrong");
     }
-  }
+  };
 
   return (
-    <div className='login-popup'>
+    <div className="login-popup">
 
-      <form onSubmit={onLogin} className='loging-popup-container'>
+      <form
+        onSubmit={onLogin}
+        className="loging-popup-container"
+      >
 
-        {/* Title */}
-        <div className='loging-popup-title'>
+        {/* TITLE */}
+        <div className="loging-popup-title">
 
           <h2>{currentState}</h2>
 
           <img
-            onClick={() => setShowLogin(false)}
+            onClick={() =>
+              setShowLogin(false)
+            }
             src={cross_icon}
-            alt='close'
+            alt=""
           />
 
         </div>
 
-        {/* Inputs */}
-        <div className='loging-popup-input'>
+        {/* INPUTS */}
+        <div className="loging-popup-input">
 
-          {currentState === 'Login' ? null : (
-            <input
-              name='name'
-              onChange={onChangeHandler}
-              value={data.name}
-              type='text'
-              placeholder='Your name'
-              required
-            />
-          )}
+          {currentState === "Login"
+            ? null
+            : (
+              <input
+                type="text"
+                name="name"
+                value={data.name}
+                onChange={onChangeHandler}
+                placeholder="Your Name"
+                required
+              />
+            )}
 
           <input
-            name='email'
-            onChange={onChangeHandler}
+            type="email"
+            name="email"
             value={data.email}
-            type='email'
-            placeholder='Your Email'
+            onChange={onChangeHandler}
+            placeholder="Your Email"
             required
           />
 
           <input
-            name='password'
-            onChange={onChangeHandler}
+            type="password"
+            name="password"
             value={data.password}
-            type='password'
-            placeholder='Password'
+            onChange={onChangeHandler}
+            placeholder="Password"
             required
           />
 
         </div>
 
-        {/* Button */}
-        <button type='submit'>
+        {/* BUTTON */}
+        <button type="submit">
 
-          {currentState === 'Sign Up'
-            ? 'Create Account'
-            : 'Login'}
+          {currentState === "Sign Up"
+            ? "Create Account"
+            : "Login"}
 
         </button>
 
-        {/* Terms */}
-        <div className='loging-popup-condition'>
+        {/* TERMS */}
+        <div className="loging-popup-condition">
 
-          <input type='checkbox' required />
+          <input type="checkbox" required />
 
           <p>
-            By continuing, I agree to the terms of use &
-            privacy policy.
+            By continuing, I agree to the
+            terms of use & privacy policy.
           </p>
 
         </div>
 
-        {/* Switch Login / Signup */}
-        {currentState === 'Login' ? (
+        {/* SWITCH LOGIN / SIGNUP */}
+        {currentState === "Login" ? (
 
           <p>
             Create a new account?{" "}
 
-            <span onClick={() => setCurrentState('Sign Up')}>
+            <span
+              onClick={() =>
+                setCurrentState("Sign Up")
+              }
+            >
               Click here
             </span>
           </p>
@@ -150,7 +182,11 @@ const LogingPopup = ({ setShowLogin }) => {
           <p>
             Already have an account?{" "}
 
-            <span onClick={() => setCurrentState('Login')}>
+            <span
+              onClick={() =>
+                setCurrentState("Login")
+              }
+            >
               Login here
             </span>
           </p>
@@ -158,7 +194,7 @@ const LogingPopup = ({ setShowLogin }) => {
 
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default LogingPopup
+export default LogingPopup;
