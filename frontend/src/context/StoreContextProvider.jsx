@@ -1,40 +1,67 @@
-import React, { useState } from "react";
-import { food_list } from "../assets/assets";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { StoreContext } from "./StoreContext";
 
 const StoreContextProvider = ({ children }) => {
 
   const url = "http://localhost:5000";
 
-  const [token, setToken] = useState("");
+  // States
+  const [food_list, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
+  const [token, setToken] = useState("");
 
+  // Fetch Food List
+  const fetchFoodList = async () => {
+
+    try {
+
+      const response = await axios.get(url + "/api/food/list");
+
+      console.log(response.data);
+
+      if (response.data.success) {
+
+        setFoodList(response.data.data);
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  // Add To Cart
   const addToCart = (itemId) => {
 
     if (!cartItems[itemId]) {
 
       setCartItems((prev) => ({
         ...prev,
-        [itemId]: 1
+        [itemId]: 1,
       }));
 
     } else {
 
       setCartItems((prev) => ({
         ...prev,
-        [itemId]: prev[itemId] + 1
+        [itemId]: prev[itemId] + 1,
       }));
     }
   };
 
+  // Remove From Cart
   const removeFromCart = (itemId) => {
 
     setCartItems((prev) => ({
       ...prev,
-      [itemId]: prev[itemId] - 1
+      [itemId]: prev[itemId] - 1,
     }));
   };
 
+  // Total Cart Amount
   const getTotalCartAmount = () => {
 
     let totalAmount = 0;
@@ -48,7 +75,9 @@ const StoreContextProvider = ({ children }) => {
         );
 
         if (itemInfo) {
+
           totalAmount += itemInfo.price * cartItems[item];
+
         }
       }
     }
@@ -56,8 +85,30 @@ const StoreContextProvider = ({ children }) => {
     return totalAmount;
   };
 
+  // Load Data
+  useEffect(() => {
+
+  const loadData = async () => {
+
+    await fetchFoodList();
+
+    const savedToken = localStorage.getItem("token");
+
+    if (savedToken) {
+
+      setToken(savedToken);
+
+    }
+  };
+
+  loadData();
+
+}, []);
+
+  // Context Value
   const contextValue = {
     food_list,
+    setFoodList,
     cartItems,
     setCartItems,
     addToCart,
@@ -65,7 +116,7 @@ const StoreContextProvider = ({ children }) => {
     getTotalCartAmount,
     url,
     token,
-    setToken
+    setToken,
   };
 
   return (
