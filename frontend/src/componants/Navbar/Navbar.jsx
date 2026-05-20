@@ -6,6 +6,10 @@ import logo from '../../assets/logo.png'
 import searchIcon from '../../assets/search_icon.png'
 import basketIcon from '../../assets/basket_icon.png'
 
+import profileIcon from '../../assets/profile_icon.png'
+import logoutIcon from '../../assets/logout_icon.png'
+import bagIcon from '../../assets/bag_icon.png'
+
 import { StoreContext } from '../../context/StoreContext'
 
 const Navbar = ({ setShowLogin }) => {
@@ -118,16 +122,24 @@ const Navbar = ({ setShowLogin }) => {
       {/* Right Side */}
       <div className='navbar-right'>
 
-        <img src={searchIcon} alt='search' />
+        <img
+          src={searchIcon}
+          alt='search'
+        />
 
         {/* Cart */}
         <div className='navbar-search-icon'>
 
           <Link to='/cart'>
-            <img src={basketIcon} alt='basket' />
+            <img
+              src={basketIcon}
+              alt='basket'
+            />
           </Link>
 
-          <div className={getTotalCartAmount() === 0 ? '' : 'dot'}></div>
+          <div
+            className={getTotalCartAmount() === 0 ? '' : 'dot'}
+          ></div>
 
         </div>
 
@@ -142,18 +154,22 @@ const Navbar = ({ setShowLogin }) => {
 
           <div className='navbar-profile'>
 
+            {/* Profile Icon */}
             <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              alt="profile"
+              className='profile-icon'
+              src={profileIcon}
+              alt='profile'
             />
 
+            {/* Dropdown */}
             <ul className='nav-profile-dropdown'>
 
               <li>
 
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png"
-                  alt="orders"
+                  className='dropdown-icon'
+                  src={bagIcon}
+                  alt='orders'
                 />
 
                 <p>Orders</p>
@@ -165,8 +181,9 @@ const Navbar = ({ setShowLogin }) => {
               <li onClick={logout}>
 
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png"
-                  alt="logout"
+                  className='dropdown-icon'
+                  src={logoutIcon}
+                  alt='logout'
                 />
 
                 <p>Logout</p>
