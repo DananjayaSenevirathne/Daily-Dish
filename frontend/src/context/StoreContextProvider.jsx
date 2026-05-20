@@ -6,17 +6,19 @@ const StoreContextProvider = ({ children }) => {
 
   const url = "http://localhost:5000";
 
-  // States
+  // STATES
   const [food_list, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");
 
-  // Fetch Food List
+  // FETCH FOOD LIST
   const fetchFoodList = async () => {
 
     try {
 
-      const response = await axios.get(url + "/api/food/list");
+      const response = await axios.get(
+        url + "/api/food/list"
+      );
 
       console.log(response.data);
 
@@ -33,8 +35,36 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
-  // Add To Cart
-  const addToCart = (itemId) => {
+  // LOAD CART DATA
+  const loadCartData = async (token) => {
+
+    try {
+
+      const response = await axios.post(
+        url + "/api/cart/get",
+        {},
+        {
+          headers: { token },
+        }
+      );
+
+      console.log(response.data);
+
+      if (response.data.success) {
+
+        setCartItems(response.data.cartData);
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  // ADD TO CART
+  const addToCart = async (itemId) => {
 
     if (!cartItems[itemId]) {
 
@@ -50,18 +80,58 @@ const StoreContextProvider = ({ children }) => {
         [itemId]: prev[itemId] + 1,
       }));
     }
+
+    // BACKEND
+    if (token) {
+
+      try {
+
+        await axios.post(
+          url + "/api/cart/add",
+          { itemId },
+          {
+            headers: { token },
+          }
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    }
   };
 
-  // Remove From Cart
-  const removeFromCart = (itemId) => {
+  // REMOVE FROM CART
+  const removeFromCart = async (itemId) => {
 
     setCartItems((prev) => ({
       ...prev,
       [itemId]: prev[itemId] - 1,
     }));
+
+    // BACKEND
+    if (token) {
+
+      try {
+
+        await axios.post(
+          url + "/api/cart/remove",
+          { itemId },
+          {
+            headers: { token },
+          }
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    }
   };
 
-  // Total Cart Amount
+  // TOTAL CART AMOUNT
   const getTotalCartAmount = () => {
 
     let totalAmount = 0;
@@ -76,7 +146,8 @@ const StoreContextProvider = ({ children }) => {
 
         if (itemInfo) {
 
-          totalAmount += itemInfo.price * cartItems[item];
+          totalAmount +=
+            itemInfo.price * cartItems[item];
 
         }
       }
@@ -85,27 +156,31 @@ const StoreContextProvider = ({ children }) => {
     return totalAmount;
   };
 
-  // Load Data
+  // LOAD DATA
   useEffect(() => {
 
-  const loadData = async () => {
+    const loadData = async () => {
 
-    await fetchFoodList();
+      await fetchFoodList();
 
-    const savedToken = localStorage.getItem("token");
+      const savedToken =
+        localStorage.getItem("token");
 
-    if (savedToken) {
+      if (savedToken) {
 
-      setToken(savedToken);
+        setToken(savedToken);
 
-    }
-  };
+        // FIXED LINE
+        await loadCartData(savedToken);
 
-  loadData();
+      }
+    };
 
-}, []);
+    loadData();
 
-  // Context Value
+  }, []);
+
+  // CONTEXT VALUE
   const contextValue = {
     food_list,
     setFoodList,
