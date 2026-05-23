@@ -1,115 +1,193 @@
-import React, { useState, useContext } from 'react'
-import './Navbar.css'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState, useContext } from "react";
 
-import logo from '../../assets/logo.png'
-import searchIcon from '../../assets/search_icon.png'
-import basketIcon from '../../assets/basket_icon.png'
+import "./Navbar.css";
 
-import profileIcon from '../../assets/profile_icon.png'
-import logoutIcon from '../../assets/logout_icon.png'
-import bagIcon from '../../assets/bag_icon.png'
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
-import { StoreContext } from '../../context/StoreContext'
+import logo from "../../assets/logo.png";
+
+import searchIcon from "../../assets/search_icon.png";
+
+import basketIcon from "../../assets/basket_icon.png";
+
+import profileIcon from "../../assets/profile_icon.png";
+
+import logoutIcon from "../../assets/logout_icon.png";
+
+import bagIcon from "../../assets/bag_icon.png";
+
+import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = ({ setShowLogin }) => {
 
-  const [menu, setMenu] = useState('home')
+  const [menu, setMenu] =
+    useState("home");
 
   const {
     getTotalCartAmount,
     token,
-    setToken
-  } = useContext(StoreContext)
+    setToken,
+  } = useContext(StoreContext);
 
-  const location = useLocation()
+  const location =
+    useLocation();
 
-  const isHomePage = location.pathname === '/'
+  const navigate =
+    useNavigate();
 
-  // Logout function
+  const isHomePage =
+    location.pathname === "/";
+
+  // LOGOUT
   const logout = () => {
 
-    localStorage.removeItem("token")
+    localStorage.removeItem(
+      "token"
+    );
 
-    setToken("")
+    setToken("");
 
-  }
+    navigate("/");
+  };
 
   return (
 
-    <div className='navbar'>
+    <div className="navbar">
 
-      {/* Logo */}
-      <Link to='/'>
+      {/* LOGO */}
+      <Link to="/">
+
         <img
           src={logo}
-          alt='logo'
-          className='logo'
+          alt="logo"
+          className="logo"
         />
+
       </Link>
 
-      {/* Menu */}
-      <ul className='navbar-menu'>
+      {/* MENU */}
+      <ul className="navbar-menu">
 
         <Link
-          to='/'
-          onClick={() => setMenu('home')}
-          className={menu === 'home' ? 'active' : ''}
+          to="/"
+          onClick={() =>
+            setMenu("home")
+          }
+          className={
+            menu === "home"
+              ? "active"
+              : ""
+          }
         >
           Home
         </Link>
 
         {isHomePage ? (
+
           <>
 
             <a
-              href='#explore-menu'
-              onClick={() => setMenu('menu')}
-              className={menu === 'menu' ? 'active' : ''}
+              href="#explore-menu"
+              onClick={() =>
+                setMenu("menu")
+              }
+              className={
+                menu === "menu"
+                  ? "active"
+                  : ""
+              }
             >
               Menu
             </a>
 
             <a
-              href='#app-download'
-              onClick={() => setMenu('mobile-app')}
-              className={menu === 'mobile-app' ? 'active' : ''}
+              href="#app-download"
+              onClick={() =>
+                setMenu(
+                  "mobile-app"
+                )
+              }
+              className={
+                menu ===
+                "mobile-app"
+                  ? "active"
+                  : ""
+              }
             >
               Mobile App
             </a>
 
             <a
-              href='#footer'
-              onClick={() => setMenu('contact-us')}
-              className={menu === 'contact-us' ? 'active' : ''}
+              href="#footer"
+              onClick={() =>
+                setMenu(
+                  "contact-us"
+                )
+              }
+              className={
+                menu ===
+                "contact-us"
+                  ? "active"
+                  : ""
+              }
             >
               Contact Us
             </a>
 
           </>
+
         ) : (
+
           <>
 
             <Link
-              to='/'
-              onClick={() => setMenu('menu')}
-              className={menu === 'menu' ? 'active' : ''}
+              to="/"
+              onClick={() =>
+                setMenu("menu")
+              }
+              className={
+                menu === "menu"
+                  ? "active"
+                  : ""
+              }
             >
               Menu
             </Link>
 
             <Link
-              to='/'
-              onClick={() => setMenu('mobile-app')}
-              className={menu === 'mobile-app' ? 'active' : ''}
+              to="/"
+              onClick={() =>
+                setMenu(
+                  "mobile-app"
+                )
+              }
+              className={
+                menu ===
+                "mobile-app"
+                  ? "active"
+                  : ""
+              }
             >
               Mobile App
             </Link>
 
             <Link
-              to='/'
-              onClick={() => setMenu('contact-us')}
-              className={menu === 'contact-us' ? 'active' : ''}
+              to="/"
+              onClick={() =>
+                setMenu(
+                  "contact-us"
+                )
+              }
+              className={
+                menu ===
+                "contact-us"
+                  ? "active"
+                  : ""
+              }
             >
               Contact Us
             </Link>
@@ -119,57 +197,74 @@ const Navbar = ({ setShowLogin }) => {
 
       </ul>
 
-      {/* Right Side */}
-      <div className='navbar-right'>
+      {/* RIGHT SIDE */}
+      <div className="navbar-right">
 
         <img
           src={searchIcon}
-          alt='search'
+          alt="search"
         />
 
-        {/* Cart */}
-        <div className='navbar-search-icon'>
+        {/* CART */}
+        <div className="navbar-search-icon">
 
-          <Link to='/cart'>
+          <Link to="/cart">
+
             <img
               src={basketIcon}
-              alt='basket'
+              alt="basket"
             />
+
           </Link>
 
           <div
-            className={getTotalCartAmount() === 0 ? '' : 'dot'}
+            className={
+              getTotalCartAmount() === 0
+                ? ""
+                : "dot"
+            }
           ></div>
 
         </div>
 
-        {/* Login / Profile */}
+        {/* LOGIN / PROFILE */}
         {!token ? (
 
-          <button onClick={() => setShowLogin(true)}>
+          <button
+            onClick={() =>
+              setShowLogin(true)
+            }
+          >
             Sign In
           </button>
 
         ) : (
 
-          <div className='navbar-profile'>
+          <div className="navbar-profile">
 
-            {/* Profile Icon */}
+            {/* PROFILE ICON */}
             <img
-              className='profile-icon'
+              className="profile-icon"
               src={profileIcon}
-              alt='profile'
+              alt="profile"
             />
 
-            {/* Dropdown */}
-            <ul className='nav-profile-dropdown'>
+            {/* DROPDOWN */}
+            <ul className="nav-profile-dropdown">
 
-              <li>
+              {/* ORDERS */}
+              <li
+                onClick={() =>
+                  navigate(
+                    "/myorders"
+                  )
+                }
+              >
 
                 <img
-                  className='dropdown-icon'
+                  className="dropdown-icon"
                   src={bagIcon}
-                  alt='orders'
+                  alt="orders"
                 />
 
                 <p>Orders</p>
@@ -178,12 +273,15 @@ const Navbar = ({ setShowLogin }) => {
 
               <hr />
 
-              <li onClick={logout}>
+              {/* LOGOUT */}
+              <li
+                onClick={logout}
+              >
 
                 <img
-                  className='dropdown-icon'
+                  className="dropdown-icon"
                   src={logoutIcon}
-                  alt='logout'
+                  alt="logout"
                 />
 
                 <p>Logout</p>
@@ -198,7 +296,7 @@ const Navbar = ({ setShowLogin }) => {
       </div>
 
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
